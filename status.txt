@@ -1,3 +1,6 @@
+Post funkar 
+get funkar
+Put funkar
 
 ********************
  Steg 1
