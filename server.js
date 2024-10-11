@@ -25,12 +25,12 @@ mongoose.connection.on('error', err => {
 mongoose.connect("mongodb://127.0.0.1:27017/mom3-backend").then(() => {
     console.log("Connected to database");
 
-    //console.log(mongoose.connection)
+   
 }).catch((error) => {
     console.log("Could not connect to database " + error)
 })
 
-//schema
+//schema 
 const WorkplaceSchema = new mongoose.Schema({
     companyname: {
         type: String,
@@ -41,11 +41,11 @@ const WorkplaceSchema = new mongoose.Schema({
         required: [true, "Location has to be filled in"],
     }, 
     startdate: {
-        type: Date,
+        type: String,
         required: [true, "Startdate has to be filled in"],
     },
     enddate: {
-        type: Date,
+        type: String,
         required: false,
     },
     title: {
@@ -69,7 +69,6 @@ app.listen(port, () => {
 app.get("/workplaces", async(req, res) => {
     try {
         let result = await Workplace.find({});
-        //console.dir(result);
 
         return res.json(result);
     }catch(error) {
@@ -81,7 +80,6 @@ app.get("/workplaces", async(req, res) => {
 app.post("/workplaces", async(req, res) => {
     try {
         let result = await Workplace.create(req.body);
-
         return res.json(result);
     }catch(error) {
         return res.status(400).json(error);
@@ -97,44 +95,38 @@ app.put("/workplaces/:id", async(req, res) => {
         let enddate = req.body.enddate;
         let title = req.body.title;
         let description = req.body.description;
-/*
-        const filter = {_id: id};
-        const update = {companyname: companyname, location: location, startdate: startdate, enddate: enddate, title: title, description: description};
-        const result = await Workplace.findOneAndUpdate(filter, update, {
-            
-        });*/
-        let result = await Workplace.findOneAndUpdate({_id: id}, 
-        {
-            $set: {
-                companyname: companyname,
-                location: location, 
-                startdate: startdate, 
-                enddate: enddate, 
-                title: title, 
-                description: description
-            },
-        }, 
-        {
-            returnOriginal: false,
-        });
        
-        return res.json(result);
+        let result = await Workplace.findOne({_id: id});
+            result.companyname = companyname; 
+            result.location = location; 
+            result.startdate = startdate; 
+            result.enddate = enddate;
+            result.title = title;
+            result.description = description;
+            result.save().then((data) => {
+                return res.status(200).json(data);
+            }, (error) => {
+                return res.status(400).json(error);
+            });
         
     }catch(error) {
-        return res.status(400).json(error);
+       return res.status(500).json(error);
     };
 });
 
 
 //radera arbetsplats
 app.delete("/workplaces/:id", async(req, res) => {
+    
     try {
         let id = req.params.id;
+        
         let result = await Workplace.deleteOne({_id: id}); 
         
         res.json({message: "The workplace is deleted ", id});    
     
     }catch(error) {
+        //console.log(error);
         return res.status(400).json(error);
     };
 });
