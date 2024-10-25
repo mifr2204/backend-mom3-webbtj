@@ -4,6 +4,7 @@
 ********************
  Steg 1
  ********************
+env?
 
 Det ska vara möjligt att testköra din webbtjänst från annan domän än den du 
 publicerad till (om den är publicerad).
