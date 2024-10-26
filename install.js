@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
+//connectar till databasen
 mongoose.connect("mongodb://127.0.0.1:27017/mom3-backend").then(() => {
     console.log("Connected to database");
 
-   
 }).catch((error) => {
     console.log("Could not connect to database " + error)
-})
+});
 
 //schema 
 const WorkplaceSchema = new mongoose.Schema({
@@ -37,7 +37,7 @@ const WorkplaceSchema = new mongoose.Schema({
 });
 
 const Workplace = mongoose.model("Workplace", WorkplaceSchema);
-
+//skapar en modell med förinsatta object
 Workplace.create(
     {
         companyname: "Frösunda",

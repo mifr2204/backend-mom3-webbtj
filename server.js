@@ -14,13 +14,6 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-/*
-mongoose.connection.on('error', err => {
-    console.log('mongoose connection error');
-    console.dir(err);
-});
-*/
-
 //koppla upp till mongo db
 mongoose.connect("mongodb://127.0.0.1:27017/mom3-backend").then(() => {
     console.log("Connected to database");
